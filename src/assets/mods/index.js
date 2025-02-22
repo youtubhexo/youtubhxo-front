@@ -7,26 +7,26 @@
 
 layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(exports){
   
-  var $ = layui.jquery
-  ,layer = layui.layer
-  ,laytpl = layui.laytpl
-  ,form = layui.form
-  ,element = layui.element
-  ,upload = layui.upload
-  ,util = layui.util
-  ,device = layui.device()
+  const $ = layui.jquery
+  ; const layer = layui.layer
+  ; const laytpl = layui.laytpl
+  ; const form = layui.form
+  ; const element = layui.element
+  ; const upload = layui.upload
+  ; const util = layui.util
+  ; const device = layui.device()
 
-  ,DISABLED = 'layui-btn-disabled';
+  ; const DISABLED = 'layui-btn-disabled';
   
-  //阻止IE7以下访问
+  // 阻止IE7以下访问
   if(device.ie && device.ie < 8){
     layer.alert('如果您非得使用 IE 浏览器访问Fly社区，那么请使用 IE8+');
   }
   
   layui.focusInsert = function(obj, str){
-    var result, val = obj.value;
+    let result; const val = obj.value;
     obj.focus();
-    if(document.selection){ //ie
+    if(document.selection){ // ie
       result = document.selection.createRange(); 
       document.selection.empty(); 
       result.text = str; 
@@ -38,12 +38,12 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   };
 
 
-  //数字前置补零
+  // 数字前置补零
   layui.laytpl.digit = function(num, length, end){
-    var str = '';
+    let str = '';
     num = String(num);
     length = length || 2;
-    for(var i = num.length; i < length; i++){
+    for(let i = num.length; i < length; i++){
       str += '0';
     }
     return num < Math.pow(10, length) ? str + (num|0) : num;
@@ -51,9 +51,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   
   var fly = {
 
-    //Ajax
+    // Ajax
     json: function(url, data, success, options){
-      var that = this, type = typeof data === 'function';
+      const that = this; const type = typeof data === 'function';
       
       if(type){
         options = success
@@ -82,10 +82,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       });
     }
 
-    //计算字符长度
+    // 计算字符长度
     ,charLen: function(val){
-      var arr = val.split(''), len = 0;
-      for(var i = 0; i <  val.length ; i++){
+      const arr = val.split(''); let len = 0;
+      for(let i = 0; i <  val.length ; i++){
         arr[i].charCodeAt(0) < 299 ? len++ : len += 2;
       }
       return len;
@@ -93,9 +93,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     
     ,form: {}
 
-    //简易编辑器
+    // 简易编辑器
     ,layEditor: function(options){
-      var html = ['<div class="layui-unselect fly-edit">'
+      const html = ['<div class="layui-unselect fly-edit">'
         ,'<span type="face" title="插入表情"><i class="iconfont icon-yxj-expression" style="top: 1px;"></i></span>'
         ,'<span type="picture" title="插入图片：img[src]"><i class="iconfont icon-tupian"></i></span>'
         ,'<span type="href" title="超链接格式：a(href)[text]"><i class="iconfont icon-lianjie"></i></span>'
@@ -104,10 +104,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         ,'<span type="yulan" title="预览"><i class="iconfont icon-yulan1"></i></span>'
       ,'</div>'].join('');
 
-      var log = {}, mod = {
-        face: function(editor, self){ //插入表情
-          var str = '', ul, face = fly.faces;
-          for(var key in face){
+      const log = {}; const mod = {
+        face: function(editor, self){ // 插入表情
+          let str = ''; let ul; const face = fly.faces;
+          for(const key in face){
             str += '<li title="'+ key +'"><img src="'+ face[key] +'"></li>';
           }
           str = '<ul id="LAY-editface" class="layui-clear">'+ str +'</ul>';
@@ -120,11 +120,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
             layer.closeAll('tips');
           });
           $('#LAY-editface li').on('click', function(){
-            var title = $(this).attr('title') + ' ';
+            const title = $(this).attr('title') + ' ';
             layui.focusInsert(editor[0], 'face' + title);
           });
         }
-        ,picture: function(editor){ //插入图片
+        ,picture: function(editor){ // 插入图片
           layer.open({
             type: 1
             ,id: 'fly-jie-upload'
@@ -151,9 +151,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
               ,'</li>'
             ,'</ul>'].join('')
             ,success: function(layero, index){
-              var image =  layero.find('input[name="image"]');
+              const image =  layero.find('input[name="image"]');
 
-              //执行上传实例
+              // 执行上传实例
               upload.render({
                 elem: '#uploadImg'
                 ,url: '/api/upload/'
@@ -168,7 +168,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
               });
               
               form.on('submit(uploadImages)', function(data){
-                var field = data.field;
+                const field = data.field;
                 if(!field.image) return image.focus();
                 layui.focusInsert(editor[0], 'img['+ field.image + '] ');
                 layer.close(index);
@@ -176,7 +176,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
             }
           });
         }
-        ,href: function(editor){ //超链接
+        ,href: function(editor){ // 超链接
           layer.prompt({
             title: '请输入合法链接'
             ,shade: false
@@ -195,7 +195,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
             layer.close(index);
           });
         }
-        ,code: function(editor){ //插入代码
+        ,code: function(editor){ // 插入代码
           layer.prompt({
             title: '请贴入代码或任意文本'
             ,formType: 2
@@ -208,11 +208,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
             layer.close(index);
           });
         }
-        ,hr: function(editor){ //插入水平分割线
+        ,hr: function(editor){ // 插入水平分割线
           layui.focusInsert(editor[0], '[hr]');
         }
-        ,yulan: function(editor){ //预览
-          var content = editor.val();
+        ,yulan: function(editor){ // 预览
+          let content = editor.val();
           
           content = /^\{html\}/.test(content) 
             ? content.replace(/^\{html\}/, '')
@@ -233,10 +233,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         options = options || {};
         fly.faces = face;
         $(options.elem).each(function(index){
-          var that = this, othis = $(that), parent = othis.parent();
+          const that = this; const othis = $(that); const parent = othis.parent();
           parent.prepend(html);
           parent.find('.fly-edit span').on('click', function(event){
-            var type = $(this).attr('type');
+            const type = $(this).attr('type');
             mod[type].call(that, othis, this);
             if(type === 'face'){
               event.stopPropagation()
@@ -252,39 +252,39 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     }
 
-    //内容转义
+    // 内容转义
     ,content: function(content){
-      //支持的html标签
-      var html = function(end){
+      // 支持的html标签
+      const html = function(end){
         return new RegExp('\\n*\\['+ (end||'') +'(pre|hr|div|span|p|table|thead|th|tbody|tr|td|ul|li|ol|li|dl|dt|dd|h2|h3|h4|h5)([\\s\\S]*?)\\]\\n*', 'g');
       };
-      content = fly.escape(content||'') //XSS
-      .replace(/img\[([^\s]+?)\]/g, function(img){  //转义图片
+      content = fly.escape(content||'') // XSS
+      .replace(/img\[([^\s]+?)\]/g, function(img){  // 转义图片
         return '<img src="' + img.replace(/(^img\[)|(\]$)/g, '') + '">';
-      }).replace(/@(\S+)(\s+?|$)/g, '@<a href="javascript:;" class="fly-aite">$1</a>$2') //转义@
-      .replace(/face\[([^\s\[\]]+?)\]/g, function(face){  //转义表情
-        var alt = face.replace(/^face/g, '');
+      }).replace(/@(\S+)(\s+?|$)/g, '@<a href="javascript:;" class="fly-aite">$1</a>$2') // 转义@
+      .replace(/face\[([^\s\[\]]+?)\]/g, function(face){  // 转义表情
+        const alt = face.replace(/^face/g, '');
         return '<img alt="'+ alt +'" title="'+ alt +'" src="' + fly.faces[alt] + '">';
-      }).replace(/a\([\s\S]+?\)\[[\s\S]*?\]/g, function(str){ //转义链接
-        var href = (str.match(/a\(([\s\S]+?)\)\[/)||[])[1];
-        var text = (str.match(/\)\[([\s\S]*?)\]/)||[])[1];
+      }).replace(/a\([\s\S]+?\)\[[\s\S]*?\]/g, function(str){ // 转义链接
+        const href = (str.match(/a\(([\s\S]+?)\)\[/)||[])[1];
+        const text = (str.match(/\)\[([\s\S]*?)\]/)||[])[1];
         if(!href) return str;
-        var rel =  /^(http(s)*:\/\/)\b(?!(\w+\.)*(sentsin.com|layui.com))\b/.test(href.replace(/\s/g, ''));
+        const rel =  /^(http(s)*:\/\/)\b(?!(\w+\.)*(sentsin.com|layui.com))\b/.test(href.replace(/\s/g, ''));
         return '<a href="'+ href +'" target="_blank"'+ (rel ? ' rel="nofollow"' : '') +'>'+ (text||href) +'</a>';
-      }).replace(html(), '\<$1 $2\>').replace(html('/'), '\</$1\>') //转移HTML代码
-      .replace(/\n/g, '<br>') //转义换行   
+      }).replace(html(), '\<$1 $2\>').replace(html('/'), '\</$1\>') // 转移HTML代码
+      .replace(/\n/g, '<br>') // 转义换行   
       return content;
     }
     
-    //新消息通知
+    // 新消息通知
     ,newmsg: function(){
-      var elemUser = $('.fly-nav-user');
+      const elemUser = $('.fly-nav-user');
       if(layui.cache.user.uid !== -1 && elemUser[0]){
         fly.json('/message/nums/', {
           _: new Date().getTime()
         }, function(res){
           if(res.status === 0 && res.count > 0){
-            var msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.count +'</a>');
+            const msg = $('<a class="fly-nav-msg" href="javascript:;">'+ res.count +'</a>');
             elemUser.append(msg);
             msg.on('click', function(){
               fly.json('/message/read', {}, function(res){
@@ -309,17 +309,17 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     
   };
 
-  //签到
-  var tplSignin = ['{{# if(d.signed){ }}'
+  // 签到
+  const tplSignin = ['{{# if(d.signed){ }}'
     ,'<button class="layui-btn layui-btn-disabled">今日已签到</button>'
     ,'<span>获得了<cite>{{ d.experience }}</cite>飞吻</span>'
   ,'{{# } else { }}'
     ,'<button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>'
     ,'<span>可获得<cite>{{ d.experience }}</cite>飞吻</span>'
   ,'{{# } }}'].join('')
-  ,tplSigninDay = '已连续签到<cite>{{ d.days }}</cite>天'
+  ; const tplSigninDay = '已连续签到<cite>{{ d.days }}</cite>天'
 
-  ,signRender = function(data){
+  ; const signRender = function(data){
     laytpl(tplSignin).render(data, function(html){
       elemSigninMain.html(html);
     });
@@ -328,10 +328,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     });
   }
 
-  ,elemSigninHelp = $('#LAY_signinHelp')
-  ,elemSigninTop = $('#LAY_signinTop')
-  ,elemSigninMain = $('.fly-signin-main')
-  ,elemSigninDays = $('.fly-signin-days');
+  ; const elemSigninHelp = $('#LAY_signinHelp')
+  ; const elemSigninTop = $('#LAY_signinTop')
+  ; var elemSigninMain = $('.fly-signin-main')
+  ; var elemSigninDays = $('.fly-signin-days');
   
   if(elemSigninMain[0]){
     /*
@@ -343,7 +343,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     */
   }
   $('body').on('click', '#LAY_signin', function(){
-    var othis = $(this);
+    const othis = $(this);
     if(othis.hasClass(DISABLED)) return;
 
     fly.json('/sign/in', {
@@ -359,7 +359,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     othis.addClass(DISABLED);
   });
 
-  //签到说明
+  // 签到说明
   elemSigninHelp.on('click', function(){
     layer.open({
       type: 1
@@ -388,8 +388,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     });
   });
 
-  //签到活跃榜
-  var tplSigninTop = ['{{# layui.each(d.data, function(index, item){ }}'
+  // 签到活跃榜
+  const tplSigninTop = ['{{# layui.each(d.data, function(index, item){ }}'
     ,'<li>'
       ,'<a href="/u/{{item.uid}}" target="_blank">'
         ,'<img src="{{item.user.avatar}}">'
@@ -411,9 +411,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   ,'{{# } }}'].join('');
 
   elemSigninTop.on('click', function(){
-    var loadIndex = layer.load(1, {shade: 0.8});
-    fly.json('../json/signin.js', function(res){ //实际使用，请将 url 改为真实接口
-      var tpl = $(['<div class="layui-tab layui-tab-brief" style="margin: 5px 0 0;">'
+    const loadIndex = layer.load(1, {shade: 0.8});
+    fly.json('../json/signin.js', function(res){ // 实际使用，请将 url 改为真实接口
+      const tpl = $(['<div class="layui-tab layui-tab-brief" style="margin: 5px 0 0;">'
         ,'<ul class="layui-tab-title">'
           ,'<li class="layui-this">最新签到</li>'
           ,'<li>今日最快</li>'
@@ -425,12 +425,12 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
           ,'<ul class="layui-tab-item">3</ul>'
         ,'</div>'
       ,'</div>'].join(''))
-      ,signinItems = tpl.find('.layui-tab-item');
+      ; const signinItems = tpl.find('.layui-tab-item');
 
       layer.close(loadIndex);
 
       layui.each(signinItems, function(index, item){
-        var html = laytpl(tplSigninTop).render({
+        const html = laytpl(tplSigninTop).render({
           data: res.data[index]
           ,index: index
         });
@@ -451,8 +451,8 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
 
 
-  //回帖榜
-  var tplReply = ['{{# layui.each(d.data, function(index, item){ }}'
+  // 回帖榜
+  const tplReply = ['{{# layui.each(d.data, function(index, item){ }}'
     ,'<dd>'
       ,'<a href="/u/{{item.uid}}">'
         ,'<img src="{{item.user.avatar}}">'
@@ -461,7 +461,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       ,'</a>'
     ,'</dd>'
   ,'{{# }); }}'].join('')
-  ,elemReply = $('#LAY_replyRank');
+  ; const elemReply = $('#LAY_replyRank');
 
   if(elemReply[0]){
     /*
@@ -474,7 +474,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     */
   };
 
-  //相册
+  // 相册
   if($(window).width() > 750){
     layer.photos({
       photos: '.photos'
@@ -488,13 +488,13 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   }
 
 
-  //搜索
+  // 搜索
   $('.fly-search').on('click', function(){
     layer.open({
       type: 1
       ,title: false
       ,closeBtn: false
-      //,shade: [0.1, '#fff']
+      //, shade: [0.1, '#fff']
       ,shadeClose: true
       ,maxWidth: 10000
       ,skin: 'fly-layer-search'
@@ -502,11 +502,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         ,'<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
       ,'</form>'].join('')
       ,success: function(layero){
-        var input = layero.find('input');
+        const input = layero.find('input');
         input.focus();
 
         layero.find('form').submit(function(){
-          var val = input.val();
+          const val = input.val();
           if(val.replace(/\s/g, '') === ''){
             return false;
           }
@@ -516,10 +516,10 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     })
   });
 
-  //新消息通知
+  // 新消息通知
   fly.newmsg();
 
-  //发送激活邮件
+  // 发送激活邮件
   fly.activate = function(email){
     fly.json('/api/activate/', {}, function(res){
       if(res.status === 0){
@@ -533,9 +533,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     fly.activate($(this).attr('email'));
   });
 
-  //点击@
+  // 点击@
   $('body').on('click', '.fly-aite', function(){
-    var othis = $(this), text = othis.text();
+    const othis = $(this); let text = othis.text();
     if(othis.attr('href') !== 'javascript:;'){
       return;
     }
@@ -546,11 +546,11 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     });
   });
 
-  //表单提交
+  // 表单提交
   form.on('submit(*)', function(data){
-    var action = $(data.form).attr('action'), button = $(data.elem);
+    const action = $(data.form).attr('action'); const button = $(data.elem);
     fly.json(action, data.field, function(res){
-      var end = function(){
+      const end = function(){
         if(res.action){
           location.href = res.action;
         } else {
@@ -568,27 +568,27 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     return false;
   });
 
-  //加载特定模块
+  // 加载特定模块
   if(layui.cache.page && layui.cache.page !== 'index'){
-    var extend = {};
+    const extend = {};
     extend[layui.cache.page] = layui.cache.page;
     layui.extend(extend);
     layui.use(layui.cache.page);
   }
   
-  //加载IM
+  // 加载IM
   if(!device.android && !device.ios){
-    //layui.use('im');
+    // layui.use('im');
   }
 
-  //加载编辑器
+  // 加载编辑器
   fly.layEditor({
     elem: '.fly-editor'
   });
 
-  //手机设备的简单适配
-  var treeMobile = $('.site-tree-mobile')
-  ,shadeMobile = $('.site-mobile-shade')
+  // 手机设备的简单适配
+  const treeMobile = $('.site-tree-mobile')
+  ; const shadeMobile = $('.site-mobile-shade')
 
   treeMobile.on('click', function(){
     $('body').addClass('site-mobile');
@@ -598,22 +598,22 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     $('body').removeClass('site-mobile');
   });
 
-  //获取统计数据
+  // 获取统计数据
   $('.fly-handles').each(function(){
-    var othis = $(this);
+    const othis = $(this);
     $.get('/api/handle?alias='+ othis.data('alias'), function(res){
       othis.html('（下载量：'+ res.number +'）');
     })
   });
   
-  //固定Bar
+  // 固定Bar
   util.fixbar({
     bar1: '&#xe642;'
     ,bgcolor: '#009688'
     ,click: function(type){
       if(type === 'bar1'){
         layer.msg('打开 index.js，开启发表新帖的路径');
-        //location.href = 'jie/add.html';
+        // location.href = 'jie/add.html';
       }
     }
   });

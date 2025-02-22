@@ -6,30 +6,30 @@
  
 layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
-  var $ = layui.jquery;
-  var layer = layui.layer;
-  var util = layui.util;
-  var laytpl = layui.laytpl;
-  var form = layui.form;
-  var laypage = layui.laypage;
-  var fly = layui.fly;
-  var flow = layui.flow;
-  var element = layui.element;
-  var upload = layui.upload;
+  const $ = layui.jquery;
+  const layer = layui.layer;
+  const util = layui.util;
+  const laytpl = layui.laytpl;
+  const form = layui.form;
+  const laypage = layui.laypage;
+  const fly = layui.fly;
+  const flow = layui.flow;
+  const element = layui.element;
+  const upload = layui.upload;
 
-  var gather = {}, dom = {
+  const gather = {}; const dom = {
     mine: $('#LAY_mine')
     ,mineview: $('.mine-view')
     ,minemsg: $('#LAY_minemsg')
     ,infobtn: $('#LAY_btninfo')
   };
 
-  //我的相关数据
-  var elemUC = $('#LAY_uc'), elemUCM = $('#LAY_ucm');
+  // 我的相关数据
+  const elemUC = $('#LAY_uc'); const elemUCM = $('#LAY_ucm');
   gather.minelog = {};
   gather.mine = function(index, type, url){
-    var tpl = [
-      //求解
+    const tpl = [
+      // 求解
       '{{# for(var i = 0; i < d.rows.length; i++){ }}\
       <li>\
         {{# if(d.rows[i].collection_time){ }}\
@@ -58,34 +58,34 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       {{# } }}'
     ];
 
-    var view = function(res){
-      var html = laytpl(tpl[0]).render(res);
+    const view = function(res){
+      const html = laytpl(tpl[0]).render(res);
       dom.mine.children().eq(index).find('span').html(res.count);
       elemUCM.children().eq(index).find('ul').html(res.rows.length === 0 ? '<div class="fly-msg">没有相关数据</div>' : html);
     };
 
     var page = function(now){
-      var curr = now || 1;
+      const curr = now || 1;
       if(gather.minelog[type + '-page-' + curr]){
         view(gather.minelog[type + '-page-' + curr]);
       } else {
-        //我收藏的帖
+        // 我收藏的帖
         if(type === 'collection'){
-          var nums = 10; //每页出现的数据量
+          const nums = 10; // 每页出现的数据量
           fly.json(url, {}, function(res){
             res.count = res.rows.length;
 
-            var rows = layui.sort(res.rows, 'collection_timestamp', 'desc')
-            ,render = function(curr){
-              var data = []
-              ,start = curr*nums - nums
-              ,last = start + nums - 1;
+            const rows = layui.sort(res.rows, 'collection_timestamp', 'desc')
+            ; const render = function(curr){
+              const data = []
+              ; const start = curr*nums - nums
+              ; let last = start + nums - 1;
 
               if(last >= rows.length){
                 last = curr > 1 ? start + (rows.length - start - 1) : rows.length - 1;
               }
 
-              for(var i = start; i <= last; i++){
+              for(let i = start; i <= last; i++){
                 data.push(rows[i]);
               }
 
@@ -136,34 +136,34 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
   if(elemUC[0]){
     layui.each(dom.mine.children(), function(index, item){
-      var othis = $(item)
+      const othis = $(item)
       gather.mine(index, othis.data('type'), othis.data('url'));
     });
   }
 
-  //显示当前tab
+  // 显示当前tab
   if(location.hash){
     element.tabChange('user', location.hash.replace(/^#/, ''));
   }
 
   element.on('tab(user)', function(){
-    var othis = $(this), layid = othis.attr('lay-id');
+    const othis = $(this); const layid = othis.attr('lay-id');
     if(layid){
       location.hash = layid;
     }
   });
 
-  //根据ip获取城市
+  // 根据ip获取城市
   if($('#L_city').val() === ''){
     $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function(){
       $('#L_city').val(remote_ip_info.city||'');
     });
   }
 
-  //上传图片
+  // 上传图片
   if($('.upload-img')[0]){
     layui.use('upload', function(upload){
-      var avatarAdd = $('.avatar-add');
+      const avatarAdd = $('.avatar-add');
 
       upload.render({
         elem: '.upload-img'
@@ -191,12 +191,12 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     });
   }
 
-  //合作平台
+  // 合作平台
   if($('#LAY_coop')[0]){
 
-    //资源上传
+    // 资源上传
     $('#LAY_coop .uploadRes').each(function(index, item){
-      var othis = $(this);
+      const othis = $(this);
       upload.render({
         elem: item
         ,url: '/api/upload/cooperation/?filename='+ othis.data('filename')
@@ -220,8 +220,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       });
     });
 
-    //成效展示
-    var effectTpl = ['{{# layui.each(d.data, function(index, item){ }}'
+    // 成效展示
+    const effectTpl = ['{{# layui.each(d.data, function(index, item){ }}'
     ,'<tr>'
       ,'<td><a href="/u/{{ item.uid }}" target="_blank" style="color: #01AAED;">{{ item.uid }}</a></td>'
       ,'<td>{{ item.authProduct }}</td>'
@@ -230,8 +230,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       ,'</tr>'
     ,'{{# }); }}'].join('');
 
-    var effectView = function(res){
-      var html = laytpl(effectTpl).render(res);
+    const effectView = function(res){
+      const html = laytpl(effectTpl).render(res);
       $('#LAY_coop_effect').html(html);
       $('#LAY_effect_count').html('你共有 <strong style="color: #FF5722;">'+ (res.count||0) +'</strong> 笔合作授权订单');
     };
@@ -258,7 +258,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
   }
 
-  //提交成功后刷新
+  // 提交成功后刷新
   fly.form['set-mine'] = function(data, required){
     layer.msg('修改成功', {
       icon: 1
@@ -269,9 +269,9 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     });
   }
 
-  //帐号绑定
+  // 帐号绑定
   $('.acc-unbind').on('click', function(){
-    var othis = $(this), type = othis.attr('type');
+    const othis = $(this); const type = othis.attr('type');
     layer.confirm('整的要解绑'+ ({
       qq_id: 'QQ'
       ,weibo_id: '微博'
@@ -294,10 +294,10 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
   });
 
 
-  //我的消息
+  // 我的消息
   gather.minemsg = function(){
-    var delAll = $('#LAY_delallmsg')
-    ,tpl = '{{# var len = d.rows.length;\
+    const delAll = $('#LAY_delallmsg')
+    ; const tpl = '{{# var len = d.rows.length;\
     if(len === 0){ }}\
       <div class="fly-none">您暂时没有最新消息</div>\
     {{# } else { }}\
@@ -310,7 +310,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       {{# } }}\
       </ul>\
     {{# } }}'
-    ,delEnd = function(clear){
+    ; const delEnd = function(clear){
       if(clear || dom.minemsg.find('.mine-msg li').length === 0){
         dom.minemsg.html('<div class="fly-none">您暂时没有最新消息</div>');
       }
@@ -327,9 +327,9 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     });
     */
     
-    //阅读后删除
+    // 阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
-      var othis = $(this).parents('li'), id = othis.data('id');
+      const othis = $(this).parents('li'); const id = othis.data('id');
       fly.json('/message/remove/', {
         id: id
       }, function(res){
@@ -340,9 +340,9 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       });
     });
 
-    //删除全部
+    // 删除全部
     $('#LAY_delallmsg').on('click', function(){
-      var othis = $(this);
+      const othis = $(this);
       layer.confirm('确定清空吗？', function(index){
         fly.json('/message/remove/', {
           all: true
