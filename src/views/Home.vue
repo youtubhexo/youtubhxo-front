@@ -76,6 +76,11 @@ ul{
    top: 0;
    .layui-icon-search{
     margin-right: 10px;
+    font-size: 20px;
+    &:hover{
+        color:#5fb878;
+        cursor: pointer;
+    }
    }
 }
 </style>
